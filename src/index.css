@@ -1,0 +1,14 @@
+.icon-container{
+    border-radius: 50%;
+    padding: 8px;
+    width: 40px;
+    height: 40px;
+    transition: background-color 0.3s ease-in-out; 
+}
+/*transition property dictates how an element will transition from one state to another
+    in this case we are transitioning between normal state and the hover state
+    The transition here is describing how it is done (ease-in-out I guess?) and how long
+    the transition will last (0.3s)*/
+.icon-container:hover{
+    background-color: #1e1e1e;
+}
