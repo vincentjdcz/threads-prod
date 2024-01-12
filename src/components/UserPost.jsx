@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import Actions from "./Actions";
 import { useState } from "react";
 
-const UserPost = () => {
+const UserPost = ({postImg, postTitle, likes, replies}) => {
     const [liked, setLiked] = useState(false); //useState() is a hook, I think that gets the current state. Its parameter is the state value you want initially, and I guess setLiked is the setState function returned by the useState() hook
     return (
         <Link to={"/markzuckerberg/post/1"}>
@@ -43,7 +43,7 @@ const UserPost = () => {
                         />
                     </Box>
                 </Flex>
-                <Flex flex={1} flexDirection={"column"} gap={2}>
+                <Flex flex={1} flexDirection={"column"} gap={2}> {/* This portion is the "right side" of the post - not the left column portion */}
                     <Flex justifyContent={"space-between"} w={"full"}>
                         <Flex w={"full"} alignItems={"center"}>
                             <Text fontSize={"sm"} fontWeight={"bold"}>markzuckerberg</Text>
@@ -55,24 +55,28 @@ const UserPost = () => {
                         </Flex>
                     </Flex>
 
-                    <Text fontSize={"sm"}>This is my first post</Text>
-                    <Box 
+                    <Text fontSize={"sm"}>{postTitle}</Text> {/*Post text*/}
+                    {postImg && (
+                        <Box 
                         borderRadius={6}
                         overflow={"hidden"}
                         border={"1px solid"}
                         borderColor={"gray.light"}
                     >
                         {/*Notice that borderColor is separate - seems this is in order to use gray.light syntax. I guess if you want to use gray.light it has to be in a string on its own*/}
-                        <Image src='/post1.png' w={"full"} />
+                        <Image src={postImg} w={"full"} />
                     </Box>
+                    )} {/*Post img if it exists*/}
+                    
                     <Flex gap={3} my={1}>
                         <Actions liked={liked} setLiked={setLiked} />
-                    </Flex>
+                    </Flex> {/* Likes */}
+
                     <Flex gap={2} alignItems={"center"}>
-                        <Text color={"gray.light"} fontSize="sm">123 replies</Text>
+                        <Text color={"gray.light"} fontSize="sm">{replies} replies</Text>
                         <Box w={0.5} h={0.5} borderRadius={"full"} bg={"gray.light"}></Box>
-                        <Text color={"gray.light"} fontSize="sm">456 likes</Text>
-                    </Flex>
+                        <Text color={"gray.light"} fontSize="sm">{likes} likes</Text>
+                    </Flex> {/* Replies */}
                 </Flex>
             </Flex>
         </Link>

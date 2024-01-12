@@ -31,7 +31,13 @@ const UserHeader = () => {
                     </Flex>
                 </Box>
                 <Box>
-                    <Avatar name="Mark Zuckerberg" src="/zuck-avatar.png" size={"xl"}/>
+                    <Avatar name="Mark Zuckerberg" src="/zuck-avatar.png" size={
+                        {
+                            base: "md",
+                            md: "xl"
+                        }
+                    }/>
+                    {/* Looks like size can take in an object whereby you define values based on different viewport sizes. Seems base is the smallest, medium is some threshold of viewport size, and there's probably more for larger viewport sizes*/}
                 </Box>
             </Flex>
             <Text>Co-founder, executive chairman and CEO of Meta Platforms.</Text>
