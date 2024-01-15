@@ -1,13 +1,18 @@
 import express from "express";
-import { followUnfollowUser, loginUser, logoutUser, signupUser } from '../controllers/userController.js';
+import { followUnfollowUser, getUserProfile, loginUser, logoutUser, signupUser, updateUser } from '../controllers/userController.js';
 import protectRoute from "../middlewares/protectRoute.js";
 const router = express.Router();
 
 //NOTE: /signup is not the full path of the request. It's starts with /api/users (see server.js) then here we continue with /signup
+
+router.get("/profile/:username", getUserProfile); //Note: if in postman you notice it says "cannot GET [...]" or "cannot POST [...]" double check that your route is correctly defined. make sure the path is right (first param) and the method is correct (like post vs get etc)
+
 router.post("/signup", signupUser); 
 router.post("/login", loginUser); 
 router.post("/logout", logoutUser);
 router.post("/follow/:id", protectRoute, followUnfollowUser); //we'll use one route for both following and unfollowing a user because we're just toggling. Also we've added a protectRoute middleware
+router.post("/update/:id", protectRoute, updateUser);
+
 export default router;
 
 
