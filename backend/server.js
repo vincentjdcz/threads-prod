@@ -4,7 +4,7 @@ import connectDB from './db/connectDB.js'; //NOTE if you are importing a specifi
 import cookieParser from 'cookie-parser';
 
 import userRoutes from "./routes/userRoutes.js"
-
+import postRoutes from "./routes/postRoutes.js"
 dotenv.config();
 
 connectDB();
@@ -19,7 +19,7 @@ app.use(cookieParser()); //gets cookie from request and sets cookie in response
 
 //Routes:
 app.use("/api/users", userRoutes);
-
+app.use("/api/posts", postRoutes);
 
 //ASIDE: "dev": "nodemon server.js" in the scripts property in package.json allows us to run application using nodemon which 
 //alows us to avoid having to restart the server every time we make a change
