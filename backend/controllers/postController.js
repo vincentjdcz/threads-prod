@@ -63,7 +63,35 @@ const deletePost = async (req, res) => {
     } catch (err) {
         res.status(500).json({message: err.message});
     }
+};
+
+const likeUnlikePost = async (req, res) => {
+    try {
+        const {id:postId} = req.params; //remember, id:postId renames id to postId
+        const userId = req.user._id;
+
+        const post = await Post.findById(postId);
+        if(!post) {
+            return res.status(404).json({message: "Post not found"});
+        }
+
+        const userLikedPost = post.likes.includes(userId); //check if user already liked post
+
+        if(userLikedPost) {
+            //unlike post
+            await Post.updateOne({_id:postId}, {$pull: {likes: userId}}); //did something similar for follow/unfollow - see explanation there
+            res.status(200).json({message: "Post unliked successfully"});
+        } else {
+            //like post
+            post.likes.push(userId); //why didn't we do it the same way we did for the followers case? REVISE after to make it consistent
+            await post.save();
+            res.status(200).json({message: "Post liked successfully"});
+
+        }
+    } catch (err) {
+        res.status(500).json({message: err.message});
+    }
 }
 
-export { createPost, getPost, deletePost };
+export { createPost, getPost, deletePost, likeUnlikePost };
 
