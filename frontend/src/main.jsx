@@ -5,6 +5,7 @@ import './index.css'
 import { ChakraProvider, ColorModeScript, extendTheme } from '@chakra-ui/react';
 import { mode } from '@chakra-ui/theme-tools'
 import { BrowserRouter } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 /*
   Per ChatGPT Jan 10, 2024:
   global: This property is specifying global styles.
@@ -168,12 +169,15 @@ const theme = extendTheme({config, styles, colors});
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>{/*See SECTION 2 for explanation*/}
-    <ChakraProvider theme={theme}>{/* I'm guessing similar to the redux provider. Allows you to use Chakra stuff, like chakra related components and props?*/}
-      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      <App />
-    </ChakraProvider>
-    </BrowserRouter>
+    <RecoilRoot>
+      <BrowserRouter>{/*See SECTION 2 for explanation*/}
+        <ChakraProvider theme={theme}>{/* I'm guessing similar to the redux provider. Allows you to use Chakra stuff, like chakra related components and props?*/}
+          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+          <App />
+        </ChakraProvider>
+      </BrowserRouter>
+    </RecoilRoot>
+    
   </React.StrictMode>,
 )
 
