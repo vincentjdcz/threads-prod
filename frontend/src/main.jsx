@@ -168,6 +168,7 @@ Keep in mind that Chakra UI is designed to be highly customizable, and you can t
 const theme = extendTheme({config, styles, colors});
 
 ReactDOM.createRoot(document.getElementById('root')).render(
+  //apparently React.StrictMode causes react to render every component twice (initially?) in development mode
   <React.StrictMode>
     <RecoilRoot>
       <BrowserRouter>{/*See SECTION 2 for explanation*/}

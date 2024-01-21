@@ -1,7 +1,7 @@
 import User from "../models/userModel.js"
 import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCookie.js";
-
+import { v2 as cloudinary } from 'cloudinary';
 const getUserProfile = async (req, res) => {
     const {username} = req.params; //remember req.params has the parts of the url that you parameterized when you defined the routes
     try {
@@ -42,7 +42,9 @@ const signupUser = async(req, res) => {
                 _id: newUser._id,
                 name: newUser.name,
                 email: newUser.email,
-                username: newUser.username
+                username: newUser.username,
+                bio: newUser.bio,
+                profilePic: newUser.profilePic
             });
         } else {
             res.status(400).json({error: "Invalid user data"});
@@ -68,7 +70,9 @@ const loginUser = async (req, res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
-            username: user.username
+            username: user.username,
+            bio: user.bio,
+            profilePic: user.profilePic
         });
 
     } catch (error) {
@@ -118,7 +122,8 @@ const followUnfollowUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-    const { name, email, username, password, profilePic, bio} = req.body; //potential values to update, sent in the req body
+    const { name, email, username, password, bio} = req.body; //potential values to update, sent in the req body
+    let { profilePic } = req.body; //doing this on separate line because we need let because we are going to reassign the value of profilePic later
     const userId = req.user._id;
     try {
         let user = await User.findById(userId);
@@ -132,6 +137,24 @@ const updateUser = async (req, res) => {
             user.password = hashedPassword;
         }
 
+        if(profilePic) {
+            if(user.profilePic){
+                //check if user alraedy has a profilePic
+                //remember profilePic in the if above is the profilePic sent from the updateUer request
+                //user.profilePic holds the current user profile pic, if they have one
+                //if they already have one, delete the current before updating it with the new one
+
+                await cloudinary.uploader.destroy(user.profilePic.split("/").pop().split(".")[0])
+                //remember, we store the cloudinary secure url in profilePic, and that is formated in a specific way.
+                //seems, according to this, the id is found after the last / in the secure url, before the first . of that portion
+                //this id is what the destroy() method takes as input
+            }
+            console.log("before upload");
+            const uploadedResponse = await cloudinary.uploader.upload(profilePic); //self explanatory, upload profilePic to cloudinary
+            console.log("after upload");
+            profilePic = uploadedResponse.secure_url; //according to Chatgpt, this secure_url is the secure url to the location of the img we ploaded to cloudinary
+        }
+
         //what we are doing below is setting each of the user document's properties to the new value if it exists, or the same value otherwise
         user.name = name || user.name;
         user.email = email || user.email;
@@ -140,7 +163,11 @@ const updateUser = async (req, res) => {
         user.bio = bio || user.bio;
 
         user = await user.save();
-        res.status(200).json({message: "Profile updated successfully", user});
+        
+        //password should be null in response
+        user.password = null;
+        
+        res.status(200).json(user);
 
     } catch (err) {
         res.status(500).json({error: err.message});

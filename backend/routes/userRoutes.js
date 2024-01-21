@@ -11,7 +11,7 @@ router.post("/signup", signupUser);
 router.post("/login", loginUser); 
 router.post("/logout", logoutUser);
 router.post("/follow/:id", protectRoute, followUnfollowUser); //we'll use one route for both following and unfollowing a user because we're just toggling. Also we've added a protectRoute middleware
-router.post("/update/:id", protectRoute, updateUser);
+router.put("/update/:id", protectRoute, updateUser);
 
 export default router;
 
