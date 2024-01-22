@@ -2,10 +2,22 @@ import User from "../models/userModel.js"
 import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCookie.js";
 import { v2 as cloudinary } from 'cloudinary';
+import mongoose from "mongoose";
 const getUserProfile = async (req, res) => {
-    const {username} = req.params; //remember req.params has the parts of the url that you parameterized when you defined the routes
+    
+    const { query } = req.params; //remember req.params has the parts of the url that you parameterized when you defined the routes
+    //^ remember, query is either a username or user id
     try {
-        const user = await User.findOne({username}).select("-password").select("-updatedAt"); //you can chain select()'s
+        let user;
+        //query is userId
+        if(mongoose.Types.ObjectId.isValid(query)){ //checks if query is a valid mongoose object id
+            user = await User.findOne({_id: query}).select("-password").select("-updatedAt");
+        } else {
+          //query is username
+          console.log("searching username");
+          user = await User.findOne({username:query}).select("-password").select("-updatedAt"); //you can chain select()'s
+                    
+        }
         if(!user) return res.status(400).json({error: "User not found"});
         res.status(200).json(user);
 

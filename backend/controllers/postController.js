@@ -141,7 +141,7 @@ const getFeedPosts = async (req, res) => {
 
         //find all posts where postedBy is in following.
         const feedPosts = await Post.find({postedBy: {$in:following}}).sort({createdAt: -1}); //sort in descending order so latest posts are on top
-        res.status(200).json({feedPosts});
+        res.status(200).json(feedPosts);
 
     } catch (err) {
         res.status(500).json({error: err.message});

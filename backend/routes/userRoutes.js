@@ -5,8 +5,8 @@ const router = express.Router();
 
 //NOTE: /signup is not the full path of the request. It's starts with /api/users (see server.js) then here we continue with /signup
 
-router.get("/profile/:username", getUserProfile); //Note: if in postman you notice it says "cannot GET [...]" or "cannot POST [...]" double check that your route is correctly defined. make sure the path is right (first param) and the method is correct (like post vs get etc)
-
+router.get("/profile/:query", getUserProfile); //Note: if in postman you notice it says "cannot GET [...]" or "cannot POST [...]" double check that your route is correctly defined. make sure the path is right (first param) and the method is correct (like post vs get etc)
+//another note on above ^. :query will either be a username or a user id
 router.post("/signup", signupUser); 
 router.post("/login", loginUser); 
 router.post("/logout", logoutUser);
