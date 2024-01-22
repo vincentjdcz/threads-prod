@@ -3,11 +3,13 @@ import UserPost from "../components/UserPost";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useShowToast from '../hooks/useShowToast';
+import { Flex, Spinner } from "@chakra-ui/react";
 
 const UserPage = () => {
     const [user, setuser] = useState(null);
     const {username} = useParams(); //remember, useParams() gets the parameterized values that we defined in the route
     const showToast = useShowToast();
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         const getUser = async() => {
             try {
@@ -20,12 +22,20 @@ const UserPage = () => {
                 setuser(data);
             } catch (error) {
                 showToast("Error", error, "error");
+            } finally {
+                setLoading(false);
             }
         };
         getUser();
     }, [username, showToast]); //see useEffect() explanation below
-
-    if (!user) return null; //if there is no user or user doesn't exist, don't display a header
+    if(!user && loading) {
+        return (
+            <Flex justifyContent={"center"}>
+                <Spinner size="xl" />
+            </Flex>
+        )
+    }
+    if (!user && !loading) return <h1>User not found</h1>; //if there is no user or user doesn't exist
     console.log("USER PAGE USER OBJECT: ", user);
     return <>
         <UserHeader user={user}/>

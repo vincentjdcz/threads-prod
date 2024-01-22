@@ -35,9 +35,11 @@ export default function LoginCard() {
 		password: ""
 	}); //When you call useState() multiple times and assign them to differently named state variables and stateSetter variables, different pieces of state are created. so here we have state stored in a variable called show password, and another state stored in a variable called inputs
 	const showToast = useShowToast();
-	
+	const [loading, setLoading] = useState(false);
 	const handleLogin =  async () => {
+		setLoading(true);
 		try {
+
 			const res = await fetch("/api/users/login", {
 				method: "POST",
 				headers: {
@@ -50,11 +52,13 @@ export default function LoginCard() {
 				showToast("Error", data.error, "error");
 				return;
 			}
-			console.log(data);
+
 			localStorage.setItem("user-threads", JSON.stringify(data));
 			setUser(data);
 		} catch (error) {
 			showToast("Error", error, "error");
+		} finally {
+			setLoading(false);
 		}
 	}
 	return (
@@ -102,7 +106,7 @@ export default function LoginCard() {
 						</FormControl>
 						<Stack spacing={10} pt={2}>
 							<Button
-								loadingText='Submitting'
+								loadingText='Logging in'
 								size='lg'
 								bg={useColorModeValue("gray.600", "gray.700")}
 								color={"white"}
@@ -110,6 +114,7 @@ export default function LoginCard() {
 									bg: useColorModeValue("gray.700", "gray.800"),
 								}}
 								onClick={handleLogin}
+								isLoading={loading}
 							>
 								Login
 							</Button>
