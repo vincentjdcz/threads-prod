@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 import useShowToast from "../hooks/useShowToast";
 import { useRecoilValue } from "recoil";
@@ -7,10 +7,18 @@ import userAtom from "../atoms/userAtom";
 
 const Actions = ({ post: post_ }) => { //renamed post prop to post_ so as not to confuse the post prop from the post state that we define a couple lines down
   const user = useRecoilValue(userAtom);
-  const [liked, setLiked] = useState(post_.likes.includes(user?._id));
   const showToast = useShowToast();
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   const [post, setPost] = useState(post_);
+  const [liked, setLiked] = useState(post_.likes.includes(user?._id));
+
   const [isLiking, setIsLiking] = useState(false);
+  const [isReplying, setIsReplying] = useState(false);
+  const [reply, setReply] = useState("");
+
+
+
 
   const handleLikeAndUnlike = async () => {
 	if(!user) return showToast('Error', 'You must be logged in to like a post', 'error');
@@ -38,6 +46,34 @@ const Actions = ({ post: post_ }) => { //renamed post prop to post_ so as not to
 		showToast("Error", error, "error");
 	} finally {
 		setIsLiking(false);
+	}
+  }
+
+  const handleReply = async () => {
+    if(!user) return showToast("Error", "You must be logged in to reply to a post", "error"); //case where user is not logged in
+	if (isReplying) return;
+	setIsReplying(true);
+	try {
+      const res = await fetch("/api/posts/reply/" + post._id, {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+
+		},
+		body: JSON.stringify({text:reply})
+	  }) //remember, in the backend we use the label "text" to grab the reply from the request body
+	  const data = await res.json();
+
+	  if(data.error) return showToast("Error", data.error, "error");
+	  setPost({...post, replies: [...post.replies, data.reply]});
+	  showToast("Success", "Reply posted successfully", "success");
+	  console.log(data);
+	  onClose(); //close the modal window
+	  setReply("");
+	} catch (error) {
+		showToast("Error", error.message, "error");
+	} finally {
+		setIsReplying(false);
 	}
   }
 
@@ -69,7 +105,7 @@ const Actions = ({ post: post_ }) => { //renamed post prop to post_ so as not to
 					role='img'
 					viewBox='0 0 24 24'
 					width='20'
-					
+					onClick={onOpen}
 				>
 					<title>Comment</title>
 					<path
@@ -89,6 +125,32 @@ const Actions = ({ post: post_ }) => { //renamed post prop to post_ so as not to
                         <Box w={0.5} h={0.5} borderRadius={"full"} bg={"gray.light"}></Box>
                         <Text color={"gray.light"} fontSize="sm">{post.likes.length} likes</Text>
                     </Flex> {/* Replies */}
+
+					<Modal
+					isOpen={isOpen}
+					onClose={onClose}
+				>
+					<ModalOverlay />
+					<ModalContent>
+					<ModalHeader></ModalHeader>
+					<ModalCloseButton />
+					<ModalBody pb={6}>
+						<FormControl>
+						<Input as="textarea" placeholder='Reply goes here..'
+						 value={reply}
+						 onChange={(e) => setReply(e.target.value)}/>
+						</FormControl>
+					</ModalBody>
+
+					<ModalFooter>
+						<Button colorScheme='blue' size={"sm"} mr={3}
+						  isLoading={isReplying}
+						  onClick={handleReply}>
+						Reply
+						</Button>
+					</ModalFooter>
+					</ModalContent>
+				</Modal>
 			</Flex>
 
   )
@@ -147,3 +209,9 @@ const ShareSVG = () => {
 	);
 };
 export default Actions 
+
+/*
+	NOTES:
+	<Input> in the modal in the tutorial does not have as="textarea". You added that so that you can 
+	adjust the input size. Keep this in mind if something goes wrong later
+*/
