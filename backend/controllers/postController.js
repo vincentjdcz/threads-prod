@@ -63,6 +63,10 @@ const deletePost = async (req, res) => {
             return res.status(401).json({error: "Unauthorized to delete post"});
         }
 
+        if(post.img) {
+            const imgId = post.img.split("/").pop().split(".")[0];
+            await cloudinary.uploader.destroy(imgId); //delete the img on cloudinary
+        }
         await Post.findByIdAndDelete(req.params.id); //delete the post
         res.status(200).json({ message: "Post deleted successfully" });
     } catch (err) {
@@ -147,7 +151,23 @@ const getFeedPosts = async (req, res) => {
         res.status(500).json({error: err.message});
     }
 }
-export { createPost, getPost, deletePost, likeUnlikePost, replyToPost, getFeedPosts };
+
+const getUserPosts = async (req, res) => {
+    const { username } = req.params; //username of the user we want to get posts from
+    try {
+        const user = await User.findOne({username});
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const posts = await Post.find({postedBy: user._id}).sort({createdAt: -1}); //find posts with a postedBy of our user's id and sort the results in descending order based on createdAt
+        res.status(200).json(posts);
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+}
+
+export { createPost, getPost, deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts };
 
 
 /*

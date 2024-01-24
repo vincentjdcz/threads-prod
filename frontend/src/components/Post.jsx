@@ -5,11 +5,14 @@ import Actions from "./Actions";
 import { useEffect, useState } from "react";
 import useShowToast from "../hooks/useShowToast";
 import { formatDistanceToNow } from "date-fns"
+import { DeleteIcon } from "@chakra-ui/icons";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
 
 const Post = ({post, postedBy}) => {
     const [user, setUser] = useState(null);
     const showToast = useShowToast();
-
+    const currentUser = useRecoilValue(userAtom);
     const navigate = useNavigate();
     useEffect(() => {
         const getUser = async () => {
@@ -26,10 +29,30 @@ const Post = ({post, postedBy}) => {
                 showToast("Error", error.message, "error");
                 setUser(null);
             }
-        }
+        };
 
         getUser();
     }, [postedBy, showToast]) //only have postedBy and not post because this useEffect is only using postedBy (and we include showToast because that's an external function we use inside the useEffect)
+    
+    const handleDeletePost = async (e) => {
+        try {
+            e.preventDefault(); //we do this because each post is wrapped in a link. so if we click anywhere in the post we would get sent to that post if we don't do this
+            if(!window.confirm("Are you sure you want to delete this post?")) return;
+
+            const res = await fetch(`/api/posts/${post._id}`, {
+                method: "DELETE"
+            });
+            const data = await res.json();
+            if (data.error) {
+                showToast("Error", data.error, "error");
+                return;
+            }
+            showToast("Success", "Post deleted", "success");
+        } catch (error) {
+            showToast("Error", error.message, "error");
+        }
+    }
+
     if(!user) return null;
 
     return (
@@ -100,6 +123,7 @@ const Post = ({post, postedBy}) => {
                             <Text fontSize={"xs"} w={36} textAlign={"right"} color={"gray.light"}>
                                 {formatDistanceToNow(new Date(post.createdAt))} ago
                             </Text>
+                            {currentUser?._id === user._id && <DeleteIcon size={20} onClick={handleDeletePost} />}
                         </Flex>
                     </Flex>
 
@@ -178,5 +202,19 @@ GUESS AS TO HOW UI WILL LOOK:
     
     user?.username //? checks if user exists (i'm guessing) and if it does then do .name on it
 
+window.confirm():
+window.confirm() instructs the browser to display a dialog with an optional message, and to wait until the user either confirms or cancels the dialog.
 
+Under some conditions — for example, when the user switches tabs — the browser may not actually display a dialog, or may not wait for the user to confirm or cancel the dialog.
+
+Syntax
+JS
+Copy to Clipboard
+confirm(message)
+Parameters
+message
+A string you want to display in the confirmation dialog.
+
+Return value
+A boolean indicating whether OK (true) or Cancel (false) was selected. If a browser is ignoring in-page dialogs, then the returned value is always false.
 */
