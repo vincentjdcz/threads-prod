@@ -1,23 +1,23 @@
 import { Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 import useShowToast from "../hooks/useShowToast";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
+import postsAtom from "../atoms/postsAtom";
 //Consider returning the likes array in the post controller instead so that we can get updated likes
 
-const Actions = ({ post: post_ }) => { //renamed post prop to post_ so as not to confuse the post prop from the post state that we define a couple lines down
+const Actions = ({ post }) => { //renamed post prop to post_ so as not to confuse the post prop from the post state that we define a couple lines down
+
+  //if(!post_) return; //they don't do this in the video. they just check if post exists in PostPage before rendering. But already spent 2 hours trying to figure out why it becomes null here so doing this for now, check this aback later
   const user = useRecoilValue(userAtom);
-  const showToast = useShowToast();
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
-  const [post, setPost] = useState(post_);
-  const [liked, setLiked] = useState(post_.likes.includes(user?._id));
-
+  const [liked, setLiked] = useState(post.likes.includes(user?._id)); 
+  const [posts, setPosts] = useRecoilState(postsAtom);
   const [isLiking, setIsLiking] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
   const [reply, setReply] = useState("");
-
-
+  const showToast = useShowToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  
 
 
   const handleLikeAndUnlike = async () => {
@@ -35,10 +35,26 @@ const Actions = ({ post: post_ }) => { //renamed post prop to post_ so as not to
 	  if(data.error) return showToast('Error', data.error, 'error');
 	  if(!liked) {
 		//post is not yet liked
-		setPost({...post, likes: [...post.likes, user._id]});
+		const updatedPosts = posts.map((p) => { //map will iterate over all posts
+			if(p._id === post._id) { //if we find the post we are liking
+				return { ...p, likes: [...p.likes, user._id]}; //add our user id to the likes array of that post. remember ...p spreads all the attributes of p, so we're taking all the attributes p originally had then changing the likes attribute. 
+			}
+			return p;
+		});
+		setPosts(updatedPosts);
 	  } else {
 		//post is already liked, so we're unliking
-		setPost({...post, likes: post.likes.filter(id => id !== user._id)});
+		const updatedPosts = posts.map((p) => { //iterate over posts
+			if(p._id === post._id) { //if post is the one we are unliking
+				console.log("Post Before: ", p);
+				console.log("User Id: ", user._id);
+				return ({...p, likes: p.likes.filter((id) => id !== user._id)}); //remove our current user from the likes array
+			
+			}
+			//console.log("Posts after: ", updatedPosts);
+			return p;
+		})
+		setPosts(updatedPosts);
 	  }
 
 	  setLiked(!liked);
@@ -65,7 +81,14 @@ const Actions = ({ post: post_ }) => { //renamed post prop to post_ so as not to
 	  const data = await res.json();
 
 	  if(data.error) return showToast("Error", data.error, "error");
-	  setPost({...post, replies: [...post.replies, data.reply]});
+
+	  const updatedPosts = posts.map((p) => { //iterate over all posts
+		if(p._id === post._id) { //if post is the same as the post we are replying to (the post we are viewing)
+			return {...p, replies: [...p.replies, data]}; //add our reply to the replies of that post
+		}
+		return p; //otherwise just return the post as is
+	  }) 
+	  setPosts(updatedPosts); //see postsAtom for description of what state it holds.since we are modifying this state, the page we are on (whether feed, postPage, or our profile) will rerender
 	  showToast("Success", "Reply posted successfully", "success");
 	  console.log(data);
 	  onClose(); //close the modal window

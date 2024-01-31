@@ -4,31 +4,20 @@ import { useParams } from "react-router-dom";
 import useShowToast from '../hooks/useShowToast';
 import { Flex, Spinner } from "@chakra-ui/react";
 import Post from "../components/Post";
+import useGetUserProfile from "../hooks/useGetUserProfile";
+import { useRecoilState } from "recoil";
+import postsAtom from "../atoms/postsAtom";
 
 const UserPage = () => {
-    const [user, setuser] = useState(null); //user we want to get posts from
+    const {user, loading} = useGetUserProfile();
+    console.log("LOADING: " + loading);
     const {username} = useParams(); //username of the user we want to get posts for. remember, useParams() gets the parameterized values that we defined in the route
     const showToast = useShowToast();
-    const [loading, setLoading] = useState(true);
-    const [posts, setPosts] = useState([]);
+
+    const [posts, setPosts] = useRecoilState(postsAtom);
     const [fetchingPosts, setFetchingPosts] = useState(true); //starting as true because we fetch as soon as component mounts
     useEffect(() => {
-        const getUser = async() => {
-            try {
-                const res = await fetch(`/api/users/profile/${username}`);
-                const data = await res.json();
-                if(data.error) {
-                    showToast("Error", data.error, "error");
-                    return;
-                }
-                setuser(data);
-            } catch (error) {
-                showToast("Error", error.message, "error");
-            } finally {
-                setLoading(false);
-            }
-        };
-
+        setPosts([]);//we do this because if we comefrom some previous page with posts to the user page, there is a flickering moment where the user's posts are displayed because when we enter the HomePage the state of posts is still set to the posts of the user. By doing this we clear the state of posts before setting it to what we get from the fetch below
         const getPosts = async () => {
             setFetchingPosts(true);
             try {
@@ -48,9 +37,9 @@ const UserPage = () => {
             }
         };
 
-        getUser();
         getPosts();
-    }, [username, showToast]); //see useEffect() explanation below
+    }, [username, showToast, setPosts]); //see useEffect() explanation below
+    console.log("posts is here and it is recoil state", posts);
     if(!user && loading) {
         return (
             <Flex justifyContent={"center"}>

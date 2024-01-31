@@ -31,7 +31,7 @@ const createPost = async (req, res) => {
         const newPost = new Post({postedBy, text, img});
         await newPost.save();
     
-        res.status(201).json({message: "Post created successfully", newPost});
+        res.status(201).json(newPost);
     
     } catch (err) {
        res.status(500).json({error: err.message});
@@ -46,7 +46,7 @@ const getPost = async (req, res) => {
         if(!post) {
             return res.status(404).json({ error: "Post not found" });
         }
-        res.status(200).json({ post });
+        res.status(200).json(post);
 
     } catch (err) {
         res.status(500).json({error: err.message});
@@ -124,7 +124,7 @@ const replyToPost = async (req, res) => {
         post.replies.push(reply); //add the reply object to the replies array of the post
         await post.save(); //save it
 
-        res.status(200).json({message: "Reply added successfully", post}); //respond to request
+        res.status(200).json(reply); //respond to request
 
     } catch (err) {
         res.status(500).json({error: err.message});

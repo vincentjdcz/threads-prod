@@ -2,14 +2,17 @@ import { Flex, Spinner } from "@chakra-ui/react";
 import useShowToast from '../hooks/useShowToast';
 import { useEffect, useState } from "react";
 import Post from "../components/Post";
+import { useRecoilState } from "recoil";
+import postsAtom from "../atoms/postsAtom";
 
 const HomePage = () => {
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useRecoilState(postsAtom);
     const [loading, setLoading] = useState(true);
     const showToast = useShowToast();
     useEffect( () => {
         const getFeedPosts = async () => {
             setLoading(true);
+            setPosts([]); //we do this because if we comefrom the user's profile page to the homepage, there is a flickering moment where the user's posts are displayed because when we enter the HomePage the state of posts is still set to the posts of the user. By doing this we clear the state of posts before setting it to what we get from the fetch below
             try {
                 const res = await fetch("/api/posts/feed");
                 const data = await res.json()
@@ -26,7 +29,7 @@ const HomePage = () => {
             }
         }
         getFeedPosts();
-    }, [showToast])
+    }, [showToast, setPosts])
     return (
         <>
           {!loading && posts.length === 0 && <h1>Follow some users to see the feed</h1>}
