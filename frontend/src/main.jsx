@@ -6,6 +6,9 @@ import { ChakraProvider, ColorModeScript, extendTheme } from '@chakra-ui/react';
 import { mode } from '@chakra-ui/theme-tools'
 import { BrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
+import { disableReactDevTools } from '@fvilers/disable-react-devtools';
+
+if (process.env.NODE_ENV === 'production') disableReactDevTools();
 /*
   Per ChatGPT Jan 10, 2024:
   global: This property is specifying global styles.
