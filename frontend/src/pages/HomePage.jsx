@@ -14,7 +14,10 @@ const HomePage = () => {
             setLoading(true);
             setPosts([]); //we do this because if we comefrom the user's profile page to the homepage, there is a flickering moment where the user's posts are displayed because when we enter the HomePage the state of posts is still set to the posts of the user. By doing this we clear the state of posts before setting it to what we get from the fetch below
             try {
-                const res = await fetch("https://threads-prod-backend.onrender.com/api/posts/feed");
+                const res = await fetch("https://threads-prod-backend.onrender.com/api/posts/feed", {
+                  method: 'GET',
+                  credentials: 'include',  // Include credentials (cookies) in the request
+                });
                 const data = await res.json()
                 console.log("res: ", res); //TEST
                 console.log("data: ", data); //TEST
