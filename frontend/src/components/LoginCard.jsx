@@ -48,6 +48,8 @@ export default function LoginCard() {
 				body: JSON.stringify(inputs)
 			})
 			const data = await res.json();
+			console.log("login res: ", res); //TEST
+			console.log("login data: ", data); //TEST
 			if (data.error) {
 				showToast("Error", data.error, "error");
 				return;
