@@ -41,6 +41,7 @@ const CreatePost = () => {
 
         const res = await fetch("https://threads-prod-backend.onrender.com/api/posts/create", {
             method: "POST",
+            credentials: 'include',  // Include credentials (cookies) in the request
             headers: {
                 "Content-Type": "application/json"
             },

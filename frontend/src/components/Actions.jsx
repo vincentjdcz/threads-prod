@@ -27,6 +27,7 @@ const Actions = ({ post }) => { //renamed post prop to post_ so as not to confus
 	try {
 	  const res = await fetch("https://threads-prod-backend.onrender.com/api/posts/like/" + post._id, {
 		method: "PUT",
+		credentials: 'include',  // Include credentials (cookies) in the request
 		headers: {
 			"Content-Type": "application/json",
 		}
@@ -72,6 +73,7 @@ const Actions = ({ post }) => { //renamed post prop to post_ so as not to confus
 	try {
       const res = await fetch("https://threads-prod-backend.onrender.com/api/posts/reply/" + post._id, {
 		method: "PUT",
+		credentials: 'include',  // Include credentials (cookies) in the request
 		headers: {
 			"Content-Type": "application/json",
 

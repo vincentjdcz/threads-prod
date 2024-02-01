@@ -42,6 +42,7 @@ const UserHeader = ({user}) => { //remember, props gets passed as an object mapp
 
             const res = await fetch(`https://threads-prod-backend.onrender.com/api/users/follow/${user._id}`, {
                 method: "POST",
+                credentials: 'include',  // Include credentials (cookies) in the request
                 headers: {
                     "Content-Type": "application/json"
                 }

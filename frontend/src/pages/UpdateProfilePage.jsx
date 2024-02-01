@@ -42,6 +42,7 @@ export default function UpdateProfilePage() {
     try {
       const res = await fetch( `https://threads-prod-backend.onrender.com/api/users/update/${user._id}`, {
         method: "PUT",
+        credentials: 'include',  // Include credentials (cookies) in the request
         headers: {
           "Content-Type": "application/json",
 
