@@ -5,6 +5,9 @@ import cookieParser from 'cookie-parser';
 
 import userRoutes from "./routes/userRoutes.js"
 import postRoutes from "./routes/postRoutes.js"
+
+import corsOptions from './config/corsOptions.js';
+import cors from "cors"
 import {v2 as cloudinary} from "cloudinary";
 dotenv.config();
 
@@ -24,7 +27,7 @@ cloudinary.config({
 app.use(express.json({ limit: '50mb' })); //parses incoming JSON data from req.body and make the parsed output avalable as part of the request (I don't remember what part - we'll probably see later)
 app.use(express.urlencoded({ extended: true, limit: '50mb'})); //parse form data in req.body, extended: true means even if the body has nested objects it will parse no problem
 app.use(cookieParser()); //gets cookie from request and sets cookie in response
-
+app.use(cors(corsOptions));
 //Routes:
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
