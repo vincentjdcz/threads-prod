@@ -8,7 +8,7 @@ const generateTokenAndSetCookie = (userId, res) => {
 
     //setting token as a cookie
     res.cookie("jwt", token, {
-        httpOnly: true, //this cookie cannot be accessed by the browser?
+        httpOnly: false, //this cookie cannot be accessed by the browser? TEST
         maxAge: 15 * 24 * 60 * 60 * 60 * 1000,
         sameSite: "None",
         secure: true,
