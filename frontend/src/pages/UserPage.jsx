@@ -12,6 +12,7 @@ const UserPage = () => {
     const {user, loading} = useGetUserProfile();
     console.log("LOADING: " + loading);
     const {username} = useParams(); //username of the user we want to get posts for. remember, useParams() gets the parameterized values that we defined in the route
+    console.log("In user page, username: ", username); //TEST
     const showToast = useShowToast();
 
     const [posts, setPosts] = useRecoilState(postsAtom);

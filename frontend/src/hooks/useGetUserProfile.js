@@ -6,6 +6,8 @@ const useGetUserProfile = () => {
   const [user, setUser] = useState(null); //user of profile we are viewing
   const [loading, setLoading] = useState(true);
   const {username} = useParams(); //username of profile we are loading (as parameterized in the URL)
+  console.log("In usegetUserProfile, username: ", username); //TEST
+
   const showToast = useShowToast()
   /* 
   REMEMBER, any component that has a useState somewhere inside it will re-render any of its components that rely on 
@@ -21,6 +23,8 @@ const useGetUserProfile = () => {
         try {
             const res = await fetch(`https://threads-prod-backend.onrender.com/api/users/profile/${username}`);
             const data = await res.json();
+            console.log("in useGetUserProfile, res: ", res); //TEST
+            console.log("in useGetUserProfile, data: ", data); //TEST
             if(data.error) {
                 showToast("Error", data.error, "error");
                 return;

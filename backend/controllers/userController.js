@@ -8,6 +8,7 @@ const getUserProfile = async (req, res) => {
     
     const { query } = req.params; //remember req.params has the parts of the url that you parameterized when you defined the routes
     //^ remember, query is either a username or user id
+    console.log("in userController, query: ", query); //TEST
     try {
         let user;
         //query is userId
@@ -15,7 +16,7 @@ const getUserProfile = async (req, res) => {
             user = await User.findOne({_id: query}).select("-password").select("-updatedAt");
         } else {
           //query is username
-          console.log("searching username");
+          console.log("searching username: ", query);
           user = await User.findOne({username:query}).select("-password").select("-updatedAt"); //you can chain select()'s
                     
         }
