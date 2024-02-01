@@ -42,7 +42,7 @@ export default function SignupCard() {
 	const setUser = useSetRecoilState(userAtom);
 	const handleSignup = async () => {
 		try {
-			const res = await fetch("/api/users/signup", { //because we set proxy in vite.config.js such that all requests starting with /api gets forwarded to http://localhost:5000, this request - which starts with /api - will get forwarded to http://localhost:5000 (which is why we don't need to include http://localhost:5000 in the fetch URL)
+			const res = await fetch("https://threads-prod-backend.onrender.com/api/users/signup", { //because we set proxy in vite.config.js such that all requests starting with /api gets forwarded to http://localhost:5000, this request - which starts with /api - will get forwarded to http://localhost:5000 (which is why we don't need to include http://localhost:5000 in the fetch URL)
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json"

@@ -40,7 +40,7 @@ export default function UpdateProfilePage() {
     if(updating) return; //if we just clicked submit and it's still in the process of submitting, do nothing and return since we're still in the middle of updating
     setUpdating(true); //we do this so that we can render a loading icon in the submit button while the request is processing
     try {
-      const res = await fetch( `/api/users/update/${user._id}`, {
+      const res = await fetch( `https://threads-prod-backend.onrender.com/api/users/update/${user._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

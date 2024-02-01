@@ -25,7 +25,7 @@ const Actions = ({ post }) => { //renamed post prop to post_ so as not to confus
 	if(isLiking) return;
 	setIsLiking(true)
 	try {
-	  const res = await fetch ("/api/posts/like/" + post._id, {
+	  const res = await fetch("https://threads-prod-backend.onrender.com/api/posts/like/" + post._id, {
 		method: "PUT",
 		headers: {
 			"Content-Type": "application/json",
@@ -70,7 +70,7 @@ const Actions = ({ post }) => { //renamed post prop to post_ so as not to confus
 	if (isReplying) return;
 	setIsReplying(true);
 	try {
-      const res = await fetch("/api/posts/reply/" + post._id, {
+      const res = await fetch("https://threads-prod-backend.onrender.com/api/posts/reply/" + post._id, {
 		method: "PUT",
 		headers: {
 			"Content-Type": "application/json",

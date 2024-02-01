@@ -40,7 +40,7 @@ const UserHeader = ({user}) => { //remember, props gets passed as an object mapp
         setUpdating(true);
         try {
 
-            const res = await fetch(`/api/users/follow/${user._id}`, {
+            const res = await fetch(`https://threads-prod-backend.onrender.com/api/users/follow/${user._id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

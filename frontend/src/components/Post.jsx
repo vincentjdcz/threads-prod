@@ -19,7 +19,7 @@ const Post = ({post, postedBy}) => {
     useEffect(() => {
         const getUser = async () => {
             try {
-                const res = await fetch("/api/users/profile/" + postedBy);
+                const res = await fetch("https://threads-prod-backend.onrender.com/api/users/profile/" + postedBy);
                 const data = await res.json(); //data is the user who posted this post
 
                 if(data.error) {
@@ -41,7 +41,7 @@ const Post = ({post, postedBy}) => {
             e.preventDefault(); //we do this because each post is wrapped in a link. so if we click anywhere in the post we would get sent to that post if we don't do this
             if(!window.confirm("Are you sure you want to delete this post?")) return;
 
-            const res = await fetch(`/api/posts/${post._id}`, {
+            const res = await fetch(`https://threads-prod-backend.onrender.com/api/posts/${post._id}`, {
                 method: "DELETE"
             });
             const data = await res.json();

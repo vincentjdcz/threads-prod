@@ -21,7 +21,7 @@ const UserPage = () => {
         const getPosts = async () => {
             setFetchingPosts(true);
             try {
-                const res = await fetch(`/api/posts/user/${username}`);
+                const res = await fetch(`https://threads-prod-backend.onrender.com/api/posts/user/${username}`);
                 const data = await res.json();
                 console.log(data);
                 setPosts(data);
