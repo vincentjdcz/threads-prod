@@ -74,7 +74,9 @@ const loginUser = async (req, res) => {
         const { username, password } = req.body;
         const user = await User.findOne({ username }); //get the User with the username we're looking for
         const isPasswordCorrect = await bcrypt.compare(password, user?.password || ""); //check if the password provided (first paramter) is correct (by comparing it to the second parameter - which is the hashed version of the password we stored in the database)
-        
+        console.log("isPasswordCorrent: ", isPasswordCorrect); //TEST
+        console.log("user: ", user); //TEST
+
         if(!user || !isPasswordCorrect) return res.status(400).json({ error: "Invalid username or password"});
 
         generateTokenAndSetCookie(user._id, res);

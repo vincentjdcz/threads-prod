@@ -13,7 +13,8 @@ const generateTokenAndSetCookie = (userId, res) => {
         sameSite: "strict",
 
     });
-
+    console.log("res: ", res); //TEST
+    console.log("token: ", token); //TEST
     return token;
 }
 

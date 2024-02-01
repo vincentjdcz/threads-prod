@@ -16,6 +16,8 @@ const HomePage = () => {
             try {
                 const res = await fetch("https://threads-prod-backend.onrender.com/api/posts/feed");
                 const data = await res.json()
+                console.log("res: ", res); //TEST
+                console.log("data: ", data); //TEST
                 if(data.error) {
                     showToast("Error", data.error, "error");
                     return;
