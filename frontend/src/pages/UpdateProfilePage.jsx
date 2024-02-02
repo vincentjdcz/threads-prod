@@ -150,17 +150,18 @@ export default function UpdateProfilePage() {
           />
         </FormControl>
         <Stack spacing={6} direction={['column', 'row']}>
-        <Link as={RouterLink} to={`/${user.username}`}>
+
           <Button
             bg={'red.400'}
             color={'white'}
             w="full"
             _hover={{
               bg: 'red.500',
-            }}>
+            }}
+            as={RouterLink} to={`/${user.username}`}>
             Cancel
           </Button>
-        </Link>
+
           <Button
             bg={'green.400'}
             color={'white'}
