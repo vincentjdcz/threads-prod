@@ -1,7 +1,7 @@
 import { Avatar, Divider, Flex, Text } from "@chakra-ui/react";
-
+import { useNavigate } from "react-router-dom";
 const Comment = ({ reply, lastReply }) => {
-
+  const navigate = useNavigate();
 
   return (
     <>
