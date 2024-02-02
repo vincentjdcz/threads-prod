@@ -36,10 +36,12 @@ const Header = () => {
             <Link as={RouterLink} to={`/${user.username}`}>
               <RxAvatar size={24} />
             </Link>
+            <Link as={RouterLink} to={`/`}>
             <Button
                 size="xs"
                 onClick={logout}
             ><FiLogOut size={20}/></Button>
+            </Link>
             </Flex>
         )}
 
