@@ -12,7 +12,7 @@ const Header = () => {
     const user = useRecoilValue(userAtom);
     const logout = useLogout();
     const setAuthScreen = useSetRecoilState(authScreenAtom);
-    return <Flex justifyContent={"space-between"} alignItems = "center" mt={6} mb="12">
+    return <Flex justifyContent={"space-between"} alignItems="center" mt={6} mb="12">
 
         {user && (
             <Link as={RouterLink} to="/">
@@ -34,7 +34,7 @@ const Header = () => {
         {user && user.profilePic && (
             <Flex alignItems = "center" gap={4}>
             <Link as={RouterLink} to={`/${user.username}`}>
-            <Avatar size="s" boxShadow={"md"} src={user?.profilePic}/>
+            <Avatar size="xs" boxShadow={"md"} src={user?.profilePic}/>
             </Link>
             <Link as={RouterLink} to={`/`}>
             <Button
@@ -44,7 +44,7 @@ const Header = () => {
             </Link>
             </Flex>
         )}
-        
+
         {user && !user.profilePic && (
             <Flex alignItems = "center" gap={4}>
             <Link as={RouterLink} to={`/${user.username}`}>
