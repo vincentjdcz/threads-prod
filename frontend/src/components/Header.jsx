@@ -31,7 +31,21 @@ const Header = () => {
             src={colorMode === "dark" ? "/light-logo.svg" : "/dark-logo.svg"}
             onClick={toggleColorMode}
         />
-        {user && (
+        {user && user.profilePic(
+            <Flex alignItems = "center" gap={4}>
+            <Link as={RouterLink} to={`/${user.username}`}>
+            <Avatar size="24" boxShadow={"md"} src={imgUrl || user.profilePic}/>
+            </Link>
+            <Link as={RouterLink} to={`/`}>
+            <Button
+                size="xs"
+                onClick={logout}
+            ><FiLogOut size={20}/></Button>
+            </Link>
+            </Flex>
+        )}
+        
+        {user && !user.profilePic(
             <Flex alignItems = "center" gap={4}>
             <Link as={RouterLink} to={`/${user.username}`}>
               <RxAvatar size={24} />
@@ -44,7 +58,7 @@ const Header = () => {
             </Link>
             </Flex>
         )}
-
+        
         {!user && (
             <Link as={RouterLink} to={"/auth"} onClick={() => setAuthScreen("signup")}>
               Sign up
