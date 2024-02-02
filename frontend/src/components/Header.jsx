@@ -31,10 +31,10 @@ const Header = () => {
             src={colorMode === "dark" ? "/light-logo.svg" : "/dark-logo.svg"}
             onClick={toggleColorMode}
         />
-        {user && user.profilePic(
+        {user && user.profilePic && (
             <Flex alignItems = "center" gap={4}>
             <Link as={RouterLink} to={`/${user.username}`}>
-            <Avatar size="24" boxShadow={"md"} src={user.profilePic}/>
+            <Avatar size="24" boxShadow={"md"} src={user?.profilePic}/>
             </Link>
             <Link as={RouterLink} to={`/`}>
             <Button
@@ -45,7 +45,7 @@ const Header = () => {
             </Flex>
         )}
         
-        {user && !user.profilePic(
+        {user && !user.profilePic && (
             <Flex alignItems = "center" gap={4}>
             <Link as={RouterLink} to={`/${user.username}`}>
               <RxAvatar size={24} />
