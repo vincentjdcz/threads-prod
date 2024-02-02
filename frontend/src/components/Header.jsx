@@ -1,4 +1,4 @@
-import { Button, Flex, Image, Link, useColorMode } from "@chakra-ui/react";
+import { Avatar, Button, Flex, Image, Link, useColorMode } from "@chakra-ui/react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { AiFillHome } from 'react-icons/ai';
@@ -34,7 +34,7 @@ const Header = () => {
         {user && user.profilePic(
             <Flex alignItems = "center" gap={4}>
             <Link as={RouterLink} to={`/${user.username}`}>
-            <Avatar size="24" boxShadow={"md"} src={imgUrl || user.profilePic}/>
+            <Avatar size="24" boxShadow={"md"} src={user.profilePic}/>
             </Link>
             <Link as={RouterLink} to={`/`}>
             <Button
