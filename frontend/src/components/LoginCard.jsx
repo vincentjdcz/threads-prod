@@ -13,6 +13,7 @@ import {
 	Text,
 	useColorModeValue,
 	Link,
+	Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useColorModeValue, useDisclosure
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
@@ -36,6 +37,8 @@ export default function LoginCard() {
 	}); //When you call useState() multiple times and assign them to differently named state variables and stateSetter variables, different pieces of state are created. so here we have state stored in a variable called show password, and another state stored in a variable called inputs
 	const showToast = useShowToast();
 	const [loading, setLoading] = useState(false);
+	const { isOpen, onOpen, onClose } = useDisclosure()
+	onOpen();
 	const handleLogin =  async () => {
 		setLoading(true);
 		try {
@@ -133,7 +136,63 @@ export default function LoginCard() {
 					</Stack>
 				</Box>
 			</Stack>
+
+		<Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+
+        <ModalContent>
+          <ModalHeader>Welcome!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+          <Text>
+		  Welcome to this threads clone web application!<br/>
+		  This project is very much a work in progress, so if you<br/>
+		  interact with an element and it doesn't seem to work,<br/>
+		  it's probably still in development.<br/>
+		  </Text>
+          <Box h="1px" w={"full"} bg="gray.light" my={2}></Box>
+		  <Text>
+		  Feel free to use the demo account:<br/>
+			username: mzuck<br />
+			passworD: mzuck123<br />
+		  </Text>
+		  <Box h="1px" w={"full"} bg="gray.light" my={2}></Box>
+		  <Text>
+		  Or create your own account and login and poke around. <br/><br/>
+
+		  Some current features and functionalities:
+		  </Text>
+		  <ul>
+			<li>Sign Up</li>
+			<li>Log In </li>
+			<li>View Home Page Feed</li>
+			<li>View User Profile</li>
+			<li>Update (own) User Profile</li>
+			<li>Follow User (to find a user, append the username to the base 
+		browser url. For example: https://threads-prod.onrender.com/mzuck)</li>
+			<li>Unfollow User</li>
+			<li>View Post</li>
+			<li>Like Post</li>
+			<li>Comment On Post</li>
+			<li>Create Post (must be done from own user profile - create post button
+		will be in bottom right corner)</li>
+			<li>Delete (own) Post</li>
+		  </ul>
+		
+		  <Text>Enjoy!</Text>
+		  
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={onClose} isLoading={loading}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 		</Flex>
+
+		
 	);
 }
 
