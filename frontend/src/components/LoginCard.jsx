@@ -13,7 +13,7 @@ import {
 	Text,
 	useColorModeValue,
 	Link,
-	Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useColorModeValue, useDisclosure
+	Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
@@ -37,8 +37,8 @@ export default function LoginCard() {
 	}); //When you call useState() multiple times and assign them to differently named state variables and stateSetter variables, different pieces of state are created. so here we have state stored in a variable called show password, and another state stored in a variable called inputs
 	const showToast = useShowToast();
 	const [loading, setLoading] = useState(false);
-	const { isOpen, onOpen, onClose } = useDisclosure()
-	onOpen();
+	const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: true })
+	console.log("is open: ", isOpen);
 	const handleLogin =  async () => {
 		setLoading(true);
 		try {
@@ -146,23 +146,30 @@ export default function LoginCard() {
           <ModalBody pb={6}>
           <Text>
 		  Welcome to this threads clone web application!<br/>
-		  This project is very much a work in progress, so if you<br/>
+		  This portfolio project (not intended for commercial use) is very much a work in progress, so if you<br/>
 		  interact with an element and it doesn't seem to work,<br/>
 		  it's probably still in development.<br/>
 		  </Text>
+		  <br />
           <Box h="1px" w={"full"} bg="gray.light" my={2}></Box>
+		  <br />
 		  <Text>
 		  Feel free to use the demo account:<br/>
 			username: mzuck<br />
-			passworD: mzuck123<br />
+			password: mzuck123<br />
 		  </Text>
+		  <br />
 		  <Box h="1px" w={"full"} bg="gray.light" my={2}></Box>
+		  <br />
 		  <Text>
-		  Or create your own account and login and poke around. <br/><br/>
+		  Or create your own account and login and poke around! <br/><br/>
 
 		  Some current features and functionalities:
 		  </Text>
+		  <Box ml={5}>
+		  <br />
 		  <ul>
+			<li>Toggle Light and Dark Mode (with the middle icon in the top header)</li>
 			<li>Sign Up</li>
 			<li>Log In </li>
 			<li>View Home Page Feed</li>
@@ -178,7 +185,10 @@ export default function LoginCard() {
 		will be in bottom right corner)</li>
 			<li>Delete (own) Post</li>
 		  </ul>
-		
+		  </Box>
+		  <br />
+		  <Box h="1px" w={"full"} bg="gray.light" my={2}></Box>
+		  <br />
 		  <Text>Enjoy!</Text>
 		  
           </ModalBody>
