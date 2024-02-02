@@ -157,11 +157,12 @@ export default function UpdateProfilePage() {
             w="full"
             _hover={{
               bg: 'red.500',
-            }}
-            as={RouterLink} to={`/${user.username}`}>
+            }}>
+            <Link as={RouterLink} to={`/${user.username}`}>
             Cancel
+            </Link>
           </Button>
-
+        
           <Button
             bg={'green.400'}
             color={'white'}
